@@ -62,38 +62,72 @@ void multiplyMatrices(int** matrix1, int** matrix2, int*** result, int size) {
     }
 }
 
+// Function to write a matrix to a file
+void writeResultToFile(const char* filename, int** result, int size) {
+    FILE* file = fopen(filename, "w");
+
+    if (file == NULL) {
+        printf("Error opening file: %s\n", filename);
+        exit(1);
+    }
+
+    // Write size to the file
+    fprintf(file, "%d\n", size);
+
+    // Write matrix elements to the file
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            fprintf(file, "%d ", result[i][j]);
+        }
+        fprintf(file, "\n");
+    }
+
+    fclose(file);
+}
+
 int main(int argc, char* argv[]) {
+    int size;
+
+    // Check if an integer input is provided (either from user or command line)
     if (argc == 2) {
-        // Case: Generate random matrices based on an integer input
-        int size = atoi(argv[1]);
+        // Use the provided integer from command line
+        size = atoi(argv[1]);
 
         if (size <= 0) {
             printf("Invalid size argument. Please provide a positive integer.\n");
             exit(1);
         }
-
-        int** matrix1;
-        int** matrix2;
-
-        // Generate random matrices
-        generateRandomMatrix(&matrix1, size);
-        generateRandomMatrix(&matrix2, size);
-
-        // Write the matrices to files
-        writeMatrixToFile("matrix1.txt", matrix1, size);
-        writeMatrixToFile("matrix2.txt", matrix2, size);
-
-        int** result;
-        multiplyMatrices(matrix1, matrix2, &result, size);
-
-        // Clean up: free allocated memory
-        // ...
-
     } else {
-        printf("Invalid number of command line arguments.\n");
-        printf("Usage: %s size\n", argv[0]);
-        return 1; // Exit with an error code
+        // Prompt the user for an integer input
+        printf("Enter the size of the square matrices: ");
+        if (scanf("%d", &size) != 1 || size <= 0) {
+            printf("Invalid input. Please enter a positive integer.\n");
+            exit(1);
+        }
     }
+
+    int** matrix1;
+    int** matrix2;
+    int** result;
+
+    // Generate random matrices
+    generateRandomMatrix(&matrix1, size);
+    generateRandomMatrix(&matrix2, size);
+
+    // Write the matrices to files
+    writeMatrixToFile("matrix1.txt", matrix1, size);
+    writeMatrixToFile("matrix2.txt", matrix2, size);
+
+    // Perform matrix multiplication
+    multiplyMatrices(matrix1, matrix2, &result, size);
+
+    // Write the result matrix to a file
+    writeResultToFile("matrix3.txt", result, size);
+
+    // Clean up: free allocated memory
+    // ...
+
+    printf("Matrix multiplication completed. Result matrix written to matrix3.txt\n");
 
     return 0;
 }
