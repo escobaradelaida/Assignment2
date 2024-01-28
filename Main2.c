@@ -15,12 +15,12 @@ void generateRandomMatrix(int*** matrix, int size) {
     // Fill the matrix with random values
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
-            (*matrix)[i][j] = rand() % 10; // Adjust the range as needed
+            (*matrix)[i][j] = rand() % 10; // It would be preferred if the user enters an input less than 10
         }
     }
 }
 
-// Function to write a matrix to a file
+// Function to write a matrix to a file. this function will be called twice to create two separate files for each matrix
 void writeMatrixToFile(const char* filename, int** matrix, int size) {
     FILE* file = fopen(filename, "w");
 
@@ -62,7 +62,7 @@ void multiplyMatrices(int** matrix1, int** matrix2, int*** result, int size) {
     }
 }
 
-// Function to write a matrix to a file
+// Function to write a matrix to a file. This will be the third file, matrix3.txt
 void writeResultToFile(const char* filename, int** result, int size) {
     FILE* file = fopen(filename, "w");
 
@@ -88,7 +88,7 @@ void writeResultToFile(const char* filename, int** result, int size) {
 int main(int argc, char* argv[]) {
     int size;
 
-    // Check if an integer input is provided (either from user or command line)
+    // Check if an integer input is provided
     if (argc == 2) {
         // Use the provided integer from command line
         size = atoi(argv[1]);
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
             exit(1);
         }
     } else {
-        // Prompt the user for an integer input
+        // Prompt the user for an integer input. We want the user to input an integer that is at least 2 or higher
         printf("Enter the size of the square matrices: ");
         if (scanf("%d", &size) != 1 || size <= 0) {
             printf("Invalid input. Please enter a positive integer.\n");
@@ -118,16 +118,22 @@ int main(int argc, char* argv[]) {
     writeMatrixToFile("matrix1.txt", matrix1, size);
     writeMatrixToFile("matrix2.txt", matrix2, size);
 
-    // Perform matrix multiplication
+    // Perform the matrix multiplication
     multiplyMatrices(matrix1, matrix2, &result, size);
 
     // Write the result matrix to a file
     writeResultToFile("matrix3.txt", result, size);
 
-    // Clean up: free allocated memory
-    // ...
+    printf("Matrix multiplication completed. Result matrix written to matrix3.txt\n"); //user will have to open up the matrix.txt to open result
 
-    printf("Matrix multiplication completed. Result matrix written to matrix3.txt\n");
+    FILE *fptr;
+
+    fptr = fopen("matrix3.txt", "r");
+    char myString[2000];
+
+    fgets(myString, 2000, fptr);
+    printf("%s", myString);
+    fclose(fptr);
 
     return 0;
 }
