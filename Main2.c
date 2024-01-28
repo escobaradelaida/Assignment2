@@ -126,14 +126,5 @@ int main(int argc, char* argv[]) {
 
     printf("Matrix multiplication completed. Result matrix written to matrix3.txt\n"); //user will have to open up the matrix.txt to open result
 
-    FILE *fptr;
-
-    fptr = fopen("matrix3.txt", "r");
-    char myString[2000];
-
-    fgets(myString, 2000, fptr);
-    printf("%s", myString);
-    fclose(fptr);
-
     return 0;
 }
